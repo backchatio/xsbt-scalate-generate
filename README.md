@@ -1,6 +1,6 @@
 # Scalate support for SBT 0.10.x
  
-Integration for SBT that lets you generate sources for your Scalate templates and precompile them as part of the normal compilation process. 
+Integration for SBT that lets you generate sources for your Scalate templates and precompile them as part of the normal compilation process. This plugin is published to scala-tools.org.
  
 ## Usage
 
@@ -12,7 +12,7 @@ Configure the plugin in `build.sbt`:
 
     seq(scalateSettings:_*)
   
-    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.1-SNAPSHOT" % "scalate"
+    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.1" % "scalate"
       
     scalateTemplateDirectory in Compile <<= (baseDirectory) {
       (basedir) => new File(basedir, "src/main/webapp/WEB-INF")
