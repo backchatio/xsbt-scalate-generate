@@ -6,24 +6,28 @@ Integration for SBT that lets you generate sources for your Scalate templates an
 
 Include the plugin in `project/plugins/build.sbt`:
 
-    libraryDependencies += "com.mojolly.scalate" %% "xsbt-scalate-generator" % "0.0.1"
-    
+```sbt
+libraryDependencies += "com.mojolly.scalate" %% "xsbt-scalate-generator" % "0.0.1"
+```
+
 Configure the plugin in `build.sbt`:
 
-    seq(scalateSettings:_*)
-  
-    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.1" % "scalate"
+```sbt
+seq(scalateSettings:_*)
+
+libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.1" % "scalate"
       
-    scalateTemplateDirectory in Compile <<= (baseDirectory) {
-      (basedir) => new File(basedir, "src/main/webapp/WEB-INF")
-    }
+scalateTemplateDirectory in Compile <<= (baseDirectory) {
+  (basedir) => new File(basedir, "src/main/webapp/WEB-INF")
+}
     
-    scalateImports ++= Seq(
-      "import foo._",
-      "import bar._"
-    )
+scalateImports ++= Seq(
+  "import foo._",
+  "import bar._"
+)
     
-    scalateBindings += Binding("flash", "org.scalatra.FlashMap")
+scalateBindings += Binding("flash", "org.scalatra.FlashMap")
+```
 
 ## Patches
 
