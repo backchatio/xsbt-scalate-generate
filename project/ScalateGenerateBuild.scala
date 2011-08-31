@@ -10,8 +10,7 @@ object ScalateGenerateBuild extends Build {
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
       if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/")
       else                                   Some("releases" at nexus+"releases/")
-    },
-    credentials += Credentials(Path.userHome / ".ivy2" / ".scala_tools_credentials")
+    }
   )
 
 

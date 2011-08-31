@@ -75,11 +75,11 @@ object ScalatePlugin extends Plugin {
     ivyConfigurations += Scalate,
     scalateLoggingConfig in Compile <<= scalateLoggingConfigValue,
     scalateTemplateDirectory in Compile <<= scalateTemplateDirectoryValue,
-    libraryDependencies in Compile += "com.mojolly.scalate" %% "xsbt-scalate-generator" % "0.0.1",
+    libraryDependencies in Compile <<= (version) map { "com.mojolly.scalate" %% "xsbt-scalate-generator" % _ } ,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
-	  Classpaths.managedJars(Scalate, ct, report)
-	},
+      Classpaths.managedJars(Scalate, ct, report)
+    },
     scalateClasspaths <<= (fullClasspath in Runtime, managedClasspath in scalateClasspaths) map scalateClasspathsTask,
     scalateBindings := Nil,
     scalateImports := Nil)
