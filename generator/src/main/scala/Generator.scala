@@ -9,16 +9,16 @@ import java.io.File
  * Uses the Scalate template engine to generate Scala source files for Scalate templates.
  */
 class Generator {
-  
+
   var sources: File = _
   var targetDirectory: File = _
   var logConfig: File = _
-  var scalateImports : Array[String] = Array.empty
+  var scalateImports: Array[String] = Array.empty
   var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
-  
+
   lazy val engine = {
     val e = new TemplateEngine
-    
+
     // initialize template engine
     e.importStatements = scalateImports.toList
     e.bindings = (scalateBindings.toList map { b =>
@@ -29,14 +29,14 @@ class Generator {
 
   def execute: Array[File] = {
     System.setProperty("logback.configurationFile", logConfig.toString)
-    
+
     if (sources == null) {
       throw new IllegalArgumentException("The sources property is not properly set")
     }
     if (targetDirectory == null) {
       throw new IllegalArgumentException("The targetDirectory property is not properly set")
     }
-    
+
     engine.packagePrefix = ""
 
     targetDirectory.mkdirs
@@ -46,16 +46,22 @@ class Generator {
       paths = collectUrisWithExtension(sources, "", "." + extension) ::: paths
     }
 
-    paths map { uri =>
-      val templateFile = new File(sources, uri)
-      val path = uri
-      val template = TemplateSource.fromFile(templateFile, path)
-      val code = engine.generateScala(template).source
-      val f = new File(targetDirectory, "/%s.scala".format(path.replaceAll("[.]", "_")))
-      f.getParentFile.mkdirs
-      IOUtil.writeBinaryFile(f, code.getBytes("UTF-8"))
-      f
+    paths collect {
+      case Updated(uri, templateFile, scalaFile) =>
+        val template = TemplateSource.fromFile(templateFile, uri)
+        val code = engine.generateScala(template).source
+        scalaFile.getParentFile.mkdirs
+        IOUtil.writeBinaryFile(scalaFile, code.getBytes("UTF-8"))
+        scalaFile
     } toArray
+  }
+
+  object Updated {
+    def unapply(uri: String) = {
+      val templateFile = new File(sources, uri)
+      val scalaFile = new File(targetDirectory, "/%s.scala".format(uri.replaceAll("[.]", "_")))
+      if (!scalaFile.exists || templateFile.lastModified > scalaFile.lastModified) Some(uri, templateFile, scalaFile) else None
+    }
   }
 
   protected def collectUrisWithExtension(basedir: File, baseuri: String, extension: String): List[String] = {
@@ -78,5 +84,5 @@ class Generator {
     }
     collected
   }
-  
+
 }
