@@ -4,7 +4,7 @@ import Keys._
 object ScalateGenerateBuild extends Build {
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
-    version := "0.0.1",
+    version := "0.0.2-SNAPSHOT",
     organization := "com.mojolly.scalate",
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
@@ -20,7 +20,7 @@ object ScalateGenerateBuild extends Build {
     "scalate-generator",
     file("generator"),
     settings = buildSettings ++ Seq(
-      scalaVersion := "2.9.0-1",
+      scalaVersion := "2.9.1",
       libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.0" % "compile"
     )
   )
