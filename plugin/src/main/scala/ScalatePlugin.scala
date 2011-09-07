@@ -26,7 +26,7 @@ object ScalatePlugin extends Plugin {
 
   val scalateBindings = SettingKey[Seq[Binding]]("scalate-bindings",
     "The bindings for Scalate templates")
-
+    
   private def scalateLoggingConfigValue: Initialize[File] =
     (resourceDirectory in Compile) { (d) => new File(d, "/logback.xml") }
 
@@ -75,6 +75,7 @@ object ScalatePlugin extends Plugin {
     ivyConfigurations += Scalate,
     scalateLoggingConfig in Compile <<= scalateLoggingConfigValue,
     scalateTemplateDirectory in Compile <<= scalateTemplateDirectoryValue,
+    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.2-SNAPSHOT" % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
 	  Classpaths.managedJars(Scalate, ct, report)

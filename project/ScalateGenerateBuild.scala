@@ -21,8 +21,8 @@ object ScalateGenerateBuild extends Build {
     "scalate-generator",
     file("generator"),
     settings = buildSettings ++ Seq(
-      scalaVersion := "2.9.0-1",
-      libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.0" % "compile"
+      scalaVersion := "2.9.1",
+      libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.1" % "compile"
     )
   )
 
