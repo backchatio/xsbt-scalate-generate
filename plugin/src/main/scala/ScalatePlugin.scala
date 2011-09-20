@@ -27,6 +27,9 @@ object ScalatePlugin extends Plugin {
   val scalateBindings = SettingKey[Seq[Binding]]("scalate-bindings",
     "The bindings for Scalate templates")
     
+  val scalateOverwrite = SettingKey[Boolean]("scalate-overwrite",
+    "Always generate the Scala sources even when they haven't changed")
+    
   private def scalateLoggingConfigValue: Initialize[File] =
     (resourceDirectory in Compile) { (d) => new File(d, "/logback.xml") }
 
@@ -34,8 +37,8 @@ object ScalatePlugin extends Plugin {
     (resourceDirectory in Compile) { (d) => d }
 
   def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = {
-    (streams, sourceManaged in Compile, scalateTemplateDirectory in Compile, scalateLoggingConfig in Compile, managedClasspath in scalateClasspaths, scalateImports in Compile, scalateBindings in Compile) map {
-      (out, outputDir, inputDirs, logConfig, cp, imports, bindings) => generateScalateSource(out, new File(outputDir, "scalate"), inputDirs, logConfig, cp, imports, bindings)
+    (streams, sourceManaged in Compile, scalateTemplateDirectory in Compile, scalateLoggingConfig in Compile, managedClasspath in scalateClasspaths, scalateImports in Compile, scalateBindings in Compile, scalateOverwrite in Compile) map {
+      (out, outputDir, inputDirs, logConfig, cp, imports, bindings, overwrite) => generateScalateSource(out, new File(outputDir, "scalate"), inputDirs, logConfig, cp, imports, bindings, overwrite)
     }
   }
 
@@ -44,12 +47,13 @@ object ScalatePlugin extends Plugin {
 
   def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath) = ScalateClasspaths(cp.map(_.data), scalateCp.map(_.data))
 
-  def generateScalateSource(out: TaskStreams, outputDir: File, inputDir: File, logConfig: File, cp: Classpath, imports: Seq[String], bindings: Seq[Binding]) = {
+  def generateScalateSource(out: TaskStreams, outputDir: File, inputDir: File, logConfig: File, cp: Classpath, imports: Seq[String], bindings: Seq[Binding], overwrite: Boolean) = {
     withScalateClassLoader(cp.files) { classLoader =>
       type Generator = {
         var sources: File
         var targetDirectory: File
         var logConfig: File
+        var overwrite: Boolean
         var scalateImports: Array[String]
         var scalateBindings: Array[Array[AnyRef]]
         def execute: Array[File]
@@ -63,6 +67,7 @@ object ScalatePlugin extends Plugin {
       generator.sources = inputDir
       generator.targetDirectory = outputDir
       generator.logConfig = logConfig
+      generator.overwrite = overwrite
       generator.scalateImports = imports.toArray
       generator.scalateBindings = bindings.toArray map { b =>
         Array(b.name.asInstanceOf[AnyRef], b.className.asInstanceOf[AnyRef], b.importMembers.asInstanceOf[AnyRef])
@@ -77,6 +82,7 @@ object ScalatePlugin extends Plugin {
     scalateTemplateDirectory in Compile <<= scalateTemplateDirectoryValue,
     libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.2-SNAPSHOT" % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
+    scalateOverwrite := false,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
 	  Classpaths.managedJars(Scalate, ct, report)
 	},

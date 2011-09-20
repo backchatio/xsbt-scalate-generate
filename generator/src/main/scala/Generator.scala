@@ -13,6 +13,7 @@ class Generator {
   var sources: File = _
   var targetDirectory: File = _
   var logConfig: File = _
+  var overwrite: Boolean = _
   var scalateImports: Array[String] = Array.empty
   var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
 
@@ -60,7 +61,7 @@ class Generator {
     def unapply(uri: String) = {
       val templateFile = new File(sources, uri)
       val scalaFile = new File(targetDirectory, "/%s.scala".format(uri.replaceAll("[.]", "_")))
-      if (!scalaFile.exists || templateFile.lastModified > scalaFile.lastModified) Some(uri, templateFile, scalaFile) else None
+      if (overwrite || !scalaFile.exists || templateFile.lastModified > scalaFile.lastModified) Some(uri, templateFile, scalaFile) else None
     }
   }
 
