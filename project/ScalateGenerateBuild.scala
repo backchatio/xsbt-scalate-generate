@@ -4,7 +4,7 @@ import Keys._
 object ScalateGenerateBuild extends Build {
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
-    version := "0.0.2-SNAPSHOT",
+    version := "0.0.4-SNAPSHOT",
     organization := "com.mojolly.scalate",
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
