@@ -1,0 +1,7 @@
+Initial version
+
+* Generate scala code for all the templates found in search paths 
+* define bindings in sbt config
+* define import statements in sbt config
+* obviate need for scalate Boot file
+

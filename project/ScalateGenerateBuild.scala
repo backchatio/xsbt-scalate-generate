@@ -4,14 +4,15 @@ import Keys._
 object ScalateGenerateBuild extends Build {
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
-    version := "0.0.4-SNAPSHOT",
+    version := "0.0.5-SNAPSHOT",
     organization := "com.mojolly.scalate",
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
       if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/")
       else                                   Some("releases" at nexus+"releases/")
     },
-    credentials += Credentials(Path.userHome / ".ivy2" / ".scala_tools_credentials")
+    credentials += Credentials(Path.userHome / ".ivy2" / ".scala_tools_credentials"),
+    publishMavenStyle := true
   )
 
 
