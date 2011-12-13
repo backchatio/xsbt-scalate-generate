@@ -14,11 +14,10 @@ Configure the plugin in `build.sbt`:
 
 ```scala
 import ScalatePlugin._
+
 seq(scalateSettings:_*)
       
-scalateTemplateDirectory in Compile <<= (baseDirectory) {
-  (basedir) => new File(basedir, "src/main/webapp/WEB-INF")
-}
+scalateTemplateDirectory in Compile <<= (baseDirectory) { _ / "src/main/webapp/WEB-INF" }
     
 scalateImports ++= Seq(
   "import foo._",
