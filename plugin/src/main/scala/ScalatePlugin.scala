@@ -80,7 +80,7 @@ object ScalatePlugin extends Plugin {
     ivyConfigurations += Scalate,
     scalateLoggingConfig in Compile <<= scalateLoggingConfigValue,
     scalateTemplateDirectory in Compile <<= scalateTemplateDirectoryValue,
-    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % "0.0.8-SNAPSHOT" % Scalate.name,
+    libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
     scalateOverwrite := false,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>

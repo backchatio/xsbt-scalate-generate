@@ -4,7 +4,7 @@ import Keys._
 object ScalateGenerateBuild extends Build {
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
-    version := "0.0.8-SNAPSHOT",
+    version := "0.1.1-SNAPSHOT",
     organization := "com.mojolly.scalate",
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
@@ -16,6 +16,7 @@ object ScalateGenerateBuild extends Build {
   )
 
 
+  val versionGen     = TaskKey[Seq[File]]("version-gen")
   lazy val root = Project("xsbt-scalate", file("."), settings = buildSettings) aggregate (generator, plugin)
 
   lazy val generator = Project(
@@ -23,7 +24,8 @@ object ScalateGenerateBuild extends Build {
     file("generator"),
     settings = buildSettings ++ Seq(
       scalaVersion := "2.9.1",
-      libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.1" % "compile"
+      libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.3" % "compile",
+      exportJars := true
     )
   )
 
@@ -31,7 +33,23 @@ object ScalateGenerateBuild extends Build {
     "xsbt-scalate-generator",
     file("plugin"),
     settings = buildSettings ++ Seq(
-      sbtPlugin := true
+      sbtPlugin := true,
+      versionGen     <<= (sourceManaged in Compile, name, version, organization) map {
+          (sourceManaged:File, name:String, version:String, vgp:String) =>
+              val file  = sourceManaged / vgp.replace(".","/") / "Version.scala"
+              val code  = 
+                      (
+                          if (vgp != null && vgp.nonEmpty)  "package " + vgp + "\n"
+                          else              ""
+                      ) +
+                      "object Version {\n" + 
+                      "  val name\t= \"" + name + "\"\n" + 
+                      "  val version\t= \"" + version + "\"\n" + 
+                      "}\n"  
+              IO write (file, code)
+              Seq(file)
+      },
+      sourceGenerators in Compile <+= versionGen map identity
     )
   )
 }
