@@ -9,7 +9,7 @@ Include the plugin in `project/plugins.sbt`:
 ```sbt
 resolvers += ScalaToolsSnapshots
 
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.1.1")
+libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-generator" % (v + "-0.1.4"))
 ```
 
 Configure the plugin in `build.sbt`:
