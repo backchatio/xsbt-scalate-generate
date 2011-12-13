@@ -7,13 +7,14 @@ object ScalateGenerateBuild extends Build {
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
+    scalaVersion := "2.9.1",
+    crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0"),
     organization := "com.mojolly.scalate",
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
       if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/")
       else                                   Some("releases" at nexus+"releases/")
     },
-    credentials += Credentials(Path.userHome / ".ivy2" / ".scala_tools_credentials"),
     publishMavenStyle := true,
     licenses := Seq(
       "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
@@ -31,7 +32,6 @@ object ScalateGenerateBuild extends Build {
     "scalate-generator",
     file("generator"),
     settings = buildSettings ++ Seq(
-      scalaVersion := "2.9.1",
       libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.3" % "compile"
     )
   )
