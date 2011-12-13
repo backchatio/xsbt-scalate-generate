@@ -78,11 +78,11 @@ object ScalatePlugin extends Plugin {
 
   val scalateSettings: Seq[sbt.Project.Setting[_]] = Seq(
     ivyConfigurations += Scalate,
-    scalateLoggingConfig in Compile <<= scalateLoggingConfigValue,
-    scalateTemplateDirectory in Compile <<= scalateTemplateDirectoryValue,
+    scalateLoggingConfig in Compile <<= (resourceDirectory in Compile) { _ / "logback.xml" },
+    scalateTemplateDirectory in Compile <<= (resourceDirectory in Compile),
     libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
-    scalateOverwrite := false,
+    scalateOverwrite := true,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
 	  Classpaths.managedJars(Scalate, ct, report)
 	},
