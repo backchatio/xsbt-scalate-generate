@@ -13,7 +13,7 @@ libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-g
 Configure the plugin in `build.sbt`:
 
 ```scala
-import ScalatePlugin._
+import com.mojolly.scalate.ScalatePlugin._  // Must be the 1st line
 
 seq(scalateSettings:_*)
       
