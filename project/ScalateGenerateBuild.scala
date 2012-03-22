@@ -10,6 +10,7 @@ object ScalateGenerateBuild extends Build {
     scalaVersion := "2.9.1",
     crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0"),
     organization := "com.mojolly.scalate",
+    externalResolvers <<= resolvers map { rs => Resolver.withDefaultResolvers(rs, mavenCentral = true, scalaTools = false) },
     publishTo <<= (version) { version: String =>
       val nexus = "http://nexus.scala-tools.org/content/repositories/"
       if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/")
