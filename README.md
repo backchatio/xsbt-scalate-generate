@@ -1,4 +1,4 @@
-# Scalate support for SBT 0.10.x
+# Scalate support for SBT 0.1x.x
  
 Integration for SBT that lets you generate sources for your Scalate templates and precompile them as part of the normal compilation process. This plugin is published to scala-tools.org.
  
@@ -13,7 +13,8 @@ libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-g
 Configure the plugin in `build.sbt`:
 
 ```scala
-import com.mojolly.scalate.ScalatePlugin._  // Must be the 1st line
+// import must be at top of build.sbt, or SBT will complain
+import com.mojolly.scalate.ScalatePlugin._
 
 seq(scalateSettings:_*)
       
