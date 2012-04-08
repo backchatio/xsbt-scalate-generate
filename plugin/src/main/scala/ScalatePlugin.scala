@@ -12,7 +12,7 @@ object ScalatePlugin extends Plugin {
           name: String,
           className: String = "Any",
           importMembers: Boolean = false,
-          defaultValue: Option[String] = None,
+          defaultValue: String = "",
           kind: String = "val",
           isImplicit: Boolean = false)
 
@@ -73,7 +73,14 @@ object ScalatePlugin extends Plugin {
       generator.overwrite = overwrite
       generator.scalateImports = imports.toArray
       generator.scalateBindings = bindings.toArray map { b =>
-        b.productIterator.map(_.asInstanceOf[AnyRef]).toArray
+        Array(
+              b.name.asInstanceOf[AnyRef],
+              b.className.asInstanceOf[AnyRef],
+              b.importMembers.asInstanceOf[AnyRef],
+              b.defaultValue.asInstanceOf[AnyRef],
+              b.kind.asInstanceOf[AnyRef],
+              b.isImplicit.asInstanceOf[AnyRef])
+        
       }
       generator.execute.toList
     }

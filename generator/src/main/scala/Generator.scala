@@ -16,27 +16,20 @@ class Generator {
   var overwrite: Boolean = _
   var scalateImports: Array[String] = Array.empty
   var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
-//  case class Binding(
-//            name: String,
-//            className: String = "Any",
-//            importMembers: Boolean = false,
-//            defaultValue: Option[String] = None,
-//            kind: String = "val",
-//            isImplicit: Boolean = false)
+
   lazy val engine = {
     val e = new TemplateEngine
 
     // initialize template engine
     e.importStatements = scalateImports.toList
     e.bindings = (scalateBindings.toList map { b =>
-
       Binding(
         b(0).asInstanceOf[String],
         b(1).asInstanceOf[String],
         b(2).asInstanceOf[Boolean],
         (b(3) match {
-          case a: Option[_] => a.map(_.toString)
-          case _ => None
+          case null | "" => None
+          case a => Some(a.toString)
         }),
         b(4).asInstanceOf[String],
         b(5).asInstanceOf[Boolean])
@@ -45,6 +38,7 @@ class Generator {
   }
 
   def execute: Array[File] = {
+
     System.setProperty("logback.configurationFile", logConfig.toString)
 
     if (sources == null) {
