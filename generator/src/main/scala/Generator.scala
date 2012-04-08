@@ -34,7 +34,10 @@ class Generator {
         b(0).asInstanceOf[String],
         b(1).asInstanceOf[String],
         b(2).asInstanceOf[Boolean],
-        b(3).asInstanceOf[Option[String]],
+        (b(3) match {
+          case a: Option[_] => a.map(_.toString)
+          case _ => None
+        }),
         b(4).asInstanceOf[String],
         b(5).asInstanceOf[Boolean])
     }) ::: e.bindings
