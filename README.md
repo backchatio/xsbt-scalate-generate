@@ -7,7 +7,7 @@ Integration for SBT that lets you generate sources for your Scalate templates an
 Include the plugin in `project/plugins.sbt`:
 
 ```scala
-libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-generator" % (v + "-0.1.5"))
+libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-generator" % (v + "-0.1.6-SNAPSHOT"))
 ```
 
 Configure the plugin in `build.sbt`:
