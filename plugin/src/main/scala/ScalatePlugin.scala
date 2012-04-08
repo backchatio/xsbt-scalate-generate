@@ -9,9 +9,12 @@ import sbt.classpath.ClasspathUtilities
 object ScalatePlugin extends Plugin {
 
   case class Binding(
-    name: String,
-    className: String = "Any",
-    importMembers: Boolean = false)
+          name: String,
+          className: String = "Any",
+          importMembers: Boolean = false,
+          defaultValue: Option[String] = None,
+          kind: String = "val",
+          isImplicit: Boolean = false)
 
   val Scalate = config("scalate") hide
 
@@ -70,7 +73,7 @@ object ScalatePlugin extends Plugin {
       generator.overwrite = overwrite
       generator.scalateImports = imports.toArray
       generator.scalateBindings = bindings.toArray map { b =>
-        Array(b.name.asInstanceOf[AnyRef], b.className.asInstanceOf[AnyRef], b.importMembers.asInstanceOf[AnyRef])
+        b.productIterator.map(_.asInstanceOf[AnyRef]).toArray
       }
       generator.execute.toList
     }

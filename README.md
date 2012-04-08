@@ -19,13 +19,25 @@ import com.mojolly.scalate.ScalatePlugin._
 seq(scalateSettings:_*)
       
 scalateTemplateDirectory in Compile <<= (baseDirectory) { _ / "src/main/webapp/WEB-INF" }
-    
+
 scalateImports ++= Seq(
-  "import foo._",
-  "import bar._"
+  "import scalaz._",
+  "import Scalaz._",
+  "import io.backchat.oauth2._",
+  "import OAuth2Imports._",
+  "import model._"
 )
-    
-scalateBindings += Binding("flash", "org.scalatra.FlashMap")
+
+scalateBindings ++= Seq(
+  Binding("flash", "scala.collection.Map[String, Any]", defaultValue = Some("Map.empty")),
+  Binding("session", "org.scalatra.Session"),
+  Binding("sessionOption", "Option[org.scalatra.Session]"),
+  Binding("params", "scala.collection.Map[String, String]"),
+  Binding("multiParams", "org.scalatra.MultiParams"),
+  Binding("userOption", "Option[ResourceOwner]", defaultValue = Some("None")),
+  Binding("user", "ResourceOwner", defaultValue = Some("null")),
+  Binding("isAnonymous", "Boolean", defaultValue = Some("true")),
+  Binding("isAuthenticated", "Boolean", defaultValue = Some("false")))
 ```
 
 ## Patches

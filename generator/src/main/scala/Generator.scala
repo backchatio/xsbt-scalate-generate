@@ -16,14 +16,27 @@ class Generator {
   var overwrite: Boolean = _
   var scalateImports: Array[String] = Array.empty
   var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
-
+//  case class Binding(
+//            name: String,
+//            className: String = "Any",
+//            importMembers: Boolean = false,
+//            defaultValue: Option[String] = None,
+//            kind: String = "val",
+//            isImplicit: Boolean = false)
   lazy val engine = {
     val e = new TemplateEngine
 
     // initialize template engine
     e.importStatements = scalateImports.toList
     e.bindings = (scalateBindings.toList map { b =>
-      Binding(b(0).asInstanceOf[String], b(1).asInstanceOf[String], b(2).asInstanceOf[Boolean])
+
+      Binding(
+        b(0).asInstanceOf[String],
+        b(1).asInstanceOf[String],
+        b(2).asInstanceOf[Boolean],
+        b(3).asInstanceOf[Option[String]],
+        b(4).asInstanceOf[String],
+        b(5).asInstanceOf[Boolean])
     }) ::: e.bindings
     e
   }
@@ -50,6 +63,7 @@ class Generator {
     paths collect {
       case Updated(uri, templateFile, scalaFile) =>
         val template = TemplateSource.fromFile(templateFile, uri)
+
         val code = engine.generateScala(template).source
         scalaFile.getParentFile.mkdirs
         IOUtil.writeBinaryFile(scalaFile, code.getBytes("UTF-8"))
