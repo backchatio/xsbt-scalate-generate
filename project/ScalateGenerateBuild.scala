@@ -3,7 +3,7 @@ import Keys._
 
 object ScalateGenerateBuild extends Build {
 
-  val buildVersion = "0.1.6-SNAPSHOT"
+  val buildVersion = "0.1.7-SNAPSHOT"
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
