@@ -1,0 +1,4 @@
+0.1.6
+
+* Better bindings
+* More config settings
