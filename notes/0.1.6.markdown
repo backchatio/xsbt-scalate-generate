@@ -2,3 +2,4 @@
 
 * Better bindings
 * More config settings
+* Behaves nicer when used with jrebel
