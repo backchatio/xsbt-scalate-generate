@@ -4,7 +4,7 @@ import scala.xml.Group
 
 object ScalateGenerateBuild extends Build {
 
-  val buildVersion = "0.1.7"
+  val buildVersion = "0.1.6"
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
