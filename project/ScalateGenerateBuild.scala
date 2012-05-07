@@ -1,9 +1,10 @@
 import sbt._
 import Keys._
+import scala.xml.Group
 
 object ScalateGenerateBuild extends Build {
 
-  val buildVersion = "0.1.7-SNAPSHOT"
+  val buildVersion = "0.1.7"
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
@@ -24,7 +25,27 @@ object ScalateGenerateBuild extends Build {
     ),
     projectID <<= (organization,moduleName,version,artifacts,crossPaths){ (org,module,version,as,crossEnabled) =>
       ModuleID(org, module, version).cross(crossEnabled).artifacts(as : _*)
-    }
+    },
+    pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
+      <url>http://github.com/mojolly/xsbt-scalate-generate</url>
+      <scm>
+        <connection>scm:git:git://github.com/mojolly/xsbt-scalate-generate.git</connection>
+        <developerConnection>scm:git:git@github.com:mojolly/xsbt-scalate-generate.git</developerConnection>
+        <url>https://github.com/mojolly/xsbt-scalate-generate.git</url>
+      </scm>
+      <developers>
+        <developer>
+          <id>casualjim</id>
+          <name>Ivan Porto Carrero</name>
+          <url>http://flanders.co.nz/</url>
+        </developer>
+        <developer>
+          <id>sdb</id>
+          <name>Stefan De Boey</name>
+          <url>http://stefandeboey.be/</url>
+        </developer>
+      </developers>
+    )}
   )
 
 
