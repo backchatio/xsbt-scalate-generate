@@ -10,16 +10,19 @@ object ScalateGenerateBuild extends Build {
     version := buildVersion,
     scalaVersion := "2.9.1",
     crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation"),
+    javacOptions ++= Seq("-target", "1.6", "-source", "1.6"),
     organization := "com.mojolly.scalate",
     externalResolvers <<= resolvers map { rs => Resolver.withDefaultResolvers(rs, mavenCentral = true, scalaTools = false) },
-    publishTo <<= version { (v: String) =>
-      val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT"))
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    publishMavenStyle := false,
+    publishTo <<= (version) { version: String =>
+      val scalasbt = "http://scalasbt.artifactoryonline.com/scalasbt/"
+      val (name, url) = if (version.contains("-SNAPSHOT"))
+                          ("sbt-plugin-snapshots", scalasbt+"sbt-plugin-snapshots")
+                        else
+                          ("sbt-plugin-releases", scalasbt+"sbt-plugin-releases")
+      Some(Resolver.url(name, new URL(url))(Resolver.ivyStylePatterns))
     },
-    publishMavenStyle := true,
     licenses := Seq(
       "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
     ),
