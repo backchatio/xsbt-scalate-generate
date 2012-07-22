@@ -4,7 +4,7 @@ import scala.xml.Group
 
 object ScalateGenerateBuild extends Build {
 
-    val buildVersion = "0.1.9"
+    val buildVersion = "0.1.10-SNAPSHOT"
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
@@ -42,7 +42,10 @@ object ScalateGenerateBuild extends Build {
 
 
   val versionGen     = TaskKey[Seq[File]]("version-gen")
-  lazy val root = Project("xsbt-scalate", file("."), settings = buildSettings) aggregate (generator, plugin)
+  lazy val root = Project(
+                          "xsbt-scalate", 
+                          file("."), 
+                          settings = buildSettings ++ Seq(publish := {}, publishLocal := {})) aggregate (generator, plugin)
 
   lazy val generator = Project(
     "scalate-generator",
