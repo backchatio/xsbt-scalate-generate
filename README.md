@@ -13,7 +13,7 @@ resolvers += Resolver.url("sbt-plugin-releases",
   new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(
     Resolver.ivyStylePatterns)
 
-libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-generator" % (v + "-0.1.9"))
+libraryDependencies <+= sbtVersion(v => "com.mojolly.scalate" %% "xsbt-scalate-generator" % (v + "-0.1.10"))
 ```
 
 for sbt 0.11.2: (maven central)
