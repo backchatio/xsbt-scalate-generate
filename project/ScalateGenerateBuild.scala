@@ -10,6 +10,8 @@ object ScalateGenerateBuild extends Build {
     version := buildVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation"),
     javacOptions ++= Seq("-target", "1.6", "-source", "1.6"),
+    scalaVersion := "2.9.1",
+    crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2"),
     organization := "com.mojolly.scalate",
     externalResolvers <<= resolvers map { rs => Resolver.withDefaultResolvers(rs, mavenCentral = true, scalaTools = false) },
     licenses := Seq(
@@ -52,9 +54,7 @@ object ScalateGenerateBuild extends Build {
     file("generator"),
     settings = buildSettings ++ Seq(
       libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.3" % "compile",
-      scalaVersion := "2.9.1",
-      crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2"),
-            publishTo <<= version { (v: String) =>
+      publishTo <<= version { (v: String) =>
         val nexus = "https://oss.sonatype.org/"
         if (v.trim.endsWith("SNAPSHOT"))
           Some("snapshots" at nexus + "content/repositories/snapshots")
@@ -86,8 +86,6 @@ object ScalateGenerateBuild extends Build {
               Seq(file)
       },
       sourceGenerators in Compile <+= versionGen,
-      scalaVersion := "2.9.1",
-      crossScalaVersions := Nil,
       publishMavenStyle := false,
       publishTo <<= (version) { version: String =>
          val scalasbt = "http://scalasbt.artifactoryonline.com/scalasbt/"
@@ -96,8 +94,7 @@ object ScalateGenerateBuild extends Build {
                            else
                              ("sbt-plugin-releases", scalasbt+"sbt-plugin-releases")
          Some(Resolver.url(name, new URL(url))(Resolver.ivyStylePatterns))
-      },
-      version <<= (sbtVersion, version)(_ + "-" + _)
+      }
     )
   )
 }
