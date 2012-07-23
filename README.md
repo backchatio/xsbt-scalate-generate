@@ -13,7 +13,7 @@ resolvers += Resolver.url("sbt-plugin-releases",
   new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(
     Resolver.ivyStylePatterns)
 
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.1.11")
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.0")
 ```
 
 for sbt 0.11.2: (maven central)
@@ -37,19 +37,17 @@ object PluginsBuild extends Build {
 Configure the plugin in `build.sbt`:
 
 ```scala
-// import must be at top of build.sbt, or SBT will complain
-import com.mojolly.scalate.ScalatePlugin._
-
-seq(scalateSettings:_*)
 
 import ScalateKeys._
+
+seq(scalateSettings:_*)
       
 scalateTemplateDirectory in Compile <<= (sourceDirectory in Compile) { _ / "webapp" / "WEB-INF" }
 
 scalateImports ++= Seq(
   "import scalaz._",
   "import Scalaz._",
-  "import io.backchat.oauth2._",
+  "import org.scalatra.oauth2._",
   "import OAuth2Imports._",
   "import model._"
 )
@@ -64,6 +62,7 @@ scalateBindings ++= Seq(
   Binding("user", "ResourceOwner", defaultValue = Some("null")),
   Binding("isAnonymous", "Boolean", defaultValue = Some("true")),
   Binding("isAuthenticated", "Boolean", defaultValue = Some("false")))
+
 ```
 
 ## Patches
