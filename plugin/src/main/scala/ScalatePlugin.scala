@@ -18,20 +18,27 @@ object ScalatePlugin extends Plugin {
 
   val Scalate = config("scalate") hide
 
-  val scalateTemplateDirectory = SettingKey[File]("scalate-template-directory",
-    "Locations of template files.")
+  object ScalateKeys {
 
-  val scalateLoggingConfig = SettingKey[File]("scalate-logging-config",
-    "Logback config to get rid of that infernal debug output.")
+    val scalateTemplateDirectory = SettingKey[File]("scalate-template-directory",
+      "Locations of template files.")
 
-  val scalateImports = SettingKey[Seq[String]]("scalate-imports",
-    "The import statements for Scalate templates")
+    val scalateLoggingConfig = SettingKey[File]("scalate-logging-config",
+      "Logback config to get rid of that infernal debug output.")
 
-  val scalateBindings = SettingKey[Seq[Binding]]("scalate-bindings",
-    "The bindings for Scalate templates")
-    
-  val scalateOverwrite = SettingKey[Boolean]("scalate-overwrite",
-    "Always generate the Scala sources even when they haven't changed")
+    val scalateImports = SettingKey[Seq[String]]("scalate-imports",
+      "The import statements for Scalate templates")
+
+    val scalateBindings = SettingKey[Seq[Binding]]("scalate-bindings",
+      "The bindings for Scalate templates")
+      
+    val scalateOverwrite = SettingKey[Boolean]("scalate-overwrite",
+      "Always generate the Scala sources even when they haven't changed")
+
+    val scalateClasspaths = TaskKey[ScalateClasspaths]("scalate-classpaths")
+  }
+
+  import ScalateKeys._
     
   private def scalateLoggingConfigValue: Initialize[File] =
     (resourceDirectory in Compile) { (d) => new File(d, "/logback.xml") }
@@ -45,23 +52,23 @@ object ScalatePlugin extends Plugin {
     }
   }
 
-  val scalateClasspaths = TaskKey[ScalateClasspaths]("scalate-classpaths")
+  type Generator = {
+    var sources: File
+    var targetDirectory: File
+    var logConfig: File
+    var overwrite: Boolean
+    var scalateImports: Array[String]
+    var scalateBindings: Array[Array[AnyRef]]
+    def execute: Array[File]
+  }
+  
   final case class ScalateClasspaths(classpath: PathFinder, scalateClasspath: PathFinder)
 
   def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath) = ScalateClasspaths(cp.map(_.data), scalateCp.map(_.data))
 
   def generateScalateSource(out: TaskStreams, outputDir: File, inputDir: File, logConfig: File, cp: Classpath, imports: Seq[String], bindings: Seq[Binding], overwrite: Boolean) = {
     withScalateClassLoader(cp.files) { classLoader =>
-      type Generator = {
-        var sources: File
-        var targetDirectory: File
-        var logConfig: File
-        var overwrite: Boolean
-        var scalateImports: Array[String]
-        var scalateBindings: Array[Array[AnyRef]]
-        def execute: Array[File]
-      }
-
+      
       val className = "com.mojolly.scalate.Generator"
       val klass = classLoader.loadClass(className)
       val inst = klass.newInstance

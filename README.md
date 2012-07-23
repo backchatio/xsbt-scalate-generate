@@ -41,8 +41,10 @@ Configure the plugin in `build.sbt`:
 import com.mojolly.scalate.ScalatePlugin._
 
 seq(scalateSettings:_*)
+
+import ScalateKeys._
       
-scalateTemplateDirectory in Compile <<= (baseDirectory) { _ / "src/main/webapp/WEB-INF" }
+scalateTemplateDirectory in Compile <<= (sourceDirectory in Compile) { _ / "webapp" / "WEB-INF" }
 
 scalateImports ++= Seq(
   "import scalaz._",
