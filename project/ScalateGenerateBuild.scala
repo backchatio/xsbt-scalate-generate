@@ -4,7 +4,7 @@ import scala.xml.Group
 
 object ScalateGenerateBuild extends Build {
 
-    val buildVersion = "0.1.11-SNAPSHOT"
+  val buildVersion = "0.1.11-SNAPSHOT"
     
   val buildSettings = Defaults.defaultSettings ++ Seq(
     version := buildVersion,
@@ -47,54 +47,9 @@ object ScalateGenerateBuild extends Build {
   lazy val root = Project(
                           "xsbt-scalate", 
                           file("."), 
-                          settings = buildSettings ++ Seq(publish := {}, publishLocal := {})) aggregate (generator, plugin)
+                          settings = buildSettings ++ Seq(publish := {}, publishLocal := {})) dependsOn(generator, plugin) aggregate (generator, plugin)
 
-  lazy val generator = Project(
-    "scalate-generator",
-    file("generator"),
-    settings = buildSettings ++ Seq(
-      libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.3" % "compile",
-      publishTo <<= version { (v: String) =>
-        val nexus = "https://oss.sonatype.org/"
-        if (v.trim.endsWith("SNAPSHOT"))
-          Some("snapshots" at nexus + "content/repositories/snapshots")
-        else
-          Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-      },
-      publishMavenStyle := true
-    )
-  )
+  lazy val generator = file("generator")
 
-  lazy val plugin = Project(
-    "xsbt-scalate-generator",
-    file("plugin"),
-    settings = buildSettings ++ Seq(
-      sbtPlugin := true,
-      versionGen     <<= (sourceManaged in Compile, name, organization) map {
-          (sourceManaged:File, name:String, vgp:String) =>
-              val file  = sourceManaged / vgp.replace(".","/") / "Version.scala"
-              val code  = 
-                      (
-                          if (vgp != null && vgp.nonEmpty)  "package " + vgp + "\n"
-                          else              ""
-                      ) +
-                      "object Version {\n" + 
-                      "  val name\t= \"" + name + "\"\n" + 
-                      "  val version\t= \"" + buildVersion + "\"\n" + 
-                      "}\n"  
-              IO write (file, code)
-              Seq(file)
-      },
-      sourceGenerators in Compile <+= versionGen,
-      publishMavenStyle := false,
-      publishTo <<= (version) { version: String =>
-         val scalasbt = "http://scalasbt.artifactoryonline.com/scalasbt/"
-         val (name, url) = if (version.contains("-SNAPSHOT"))
-                             ("sbt-plugin-snapshots", scalasbt+"sbt-plugin-snapshots")
-                           else
-                             ("sbt-plugin-releases", scalasbt+"sbt-plugin-releases")
-         Some(Resolver.url(name, new URL(url))(Resolver.ivyStylePatterns))
-      }
-    )
-  )
+  lazy val plugin = file("plugin")
 }
