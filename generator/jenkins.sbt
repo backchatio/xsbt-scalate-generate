@@ -18,10 +18,6 @@ licenses := Seq(
   "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
 )
 
-projectID <<= (organization,moduleName,version,artifacts,crossPaths){ (org,module,version,as,crossEnabled) =>
-  ModuleID(org, module, version).cross(crossEnabled).artifacts(as : _*)
-}
-
 pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
   <url>http://github.com/mojolly/xsbt-scalate-generate</url>
   <scm>

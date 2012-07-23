@@ -4,10 +4,8 @@ import scala.xml.Group
 
 object ScalateGenerateBuild extends Build {
 
-  val buildVersion = "0.1.11-SNAPSHOT"
-    
+ 
   val buildSettings = Defaults.defaultSettings ++ Seq(
-    version := buildVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation"),
     javacOptions ++= Seq("-target", "1.6", "-source", "1.6"),
     scalaVersion := "2.9.1",
@@ -17,9 +15,6 @@ object ScalateGenerateBuild extends Build {
     licenses := Seq(
       "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
     ),
-    projectID <<= (organization,moduleName,version,artifacts,crossPaths){ (org,module,version,as,crossEnabled) =>
-      ModuleID(org, module, version).cross(crossEnabled).artifacts(as : _*)
-    },
     pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
       <url>http://github.com/mojolly/xsbt-scalate-generate</url>
       <scm>
@@ -43,13 +38,13 @@ object ScalateGenerateBuild extends Build {
   )
 
 
-  val versionGen     = TaskKey[Seq[File]]("version-gen")
-  lazy val root = Project(
-                          "xsbt-scalate", 
-                          file("."), 
-                          settings = buildSettings ++ Seq(publish := {}, publishLocal := {})) dependsOn(generator, plugin) aggregate (generator, plugin)
 
   lazy val generator = file("generator")
 
   lazy val plugin = file("plugin")
+  
+  lazy val root = Project(
+                          "xsbt-scalate", 
+                          file("."), 
+                          settings = buildSettings ++ Seq(publish := {}, publishLocal := {})) dependsOn(generator, plugin) aggregate (generator, plugin)
 }
