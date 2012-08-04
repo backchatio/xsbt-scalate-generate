@@ -6,6 +6,16 @@ Integration for SBT that lets you generate sources for your Scalate templates an
 
 Include the plugin in `project/plugins.sbt`:
 
+For sbt 0.12.0:
+
+```scala
+resolvers += Resolver.url("sbt-plugin-releases",
+  new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(
+    Resolver.ivyStylePatterns)
+
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.1")
+```
+
 For sbt 0.11.3:
 
 ```scala

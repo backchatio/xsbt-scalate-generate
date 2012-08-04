@@ -10,8 +10,6 @@ sbtPlugin := true
 
 organization := "com.mojolly.scalate"
 
-externalResolvers <<= resolvers map { rs => Resolver.withDefaultResolvers(rs, mavenCentral = true, scalaTools = false) }
-
 licenses := Seq(
   "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
 )

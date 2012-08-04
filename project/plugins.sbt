@@ -3,7 +3,7 @@
 //     Resolver.ivyStylePatterns)
 
 
-//addSbtPlugin("com.typesafe.sbtscalariform" % "sbtscalariform" % "0.3.1")
+addSbtPlugin("com.typesafe.sbtscalariform" % "sbtscalariform" % "0.5.0")
 
 // addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.1.2")
 
