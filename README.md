@@ -9,10 +9,6 @@ Include the plugin in `project/plugins.sbt`:
 For sbt 0.12.0:
 
 ```scala
-resolvers += Resolver.url("sbt-plugin-releases",
-  new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(
-    Resolver.ivyStylePatterns)
-
 addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.1")
 ```
 
@@ -73,6 +69,12 @@ scalateBindings ++= Seq(
   Binding("isAnonymous", "Boolean", defaultValue = Some("true")),
   Binding("isAuthenticated", "Boolean", defaultValue = Some("false")))
 
+```
+
+Trigger recompilation when template sources change.
+
+```scala
+watchSources <++= (sourceDirectory in Compile) map (d => (d / "webapp" ** "*").get)
 ```
 
 ## Patches
