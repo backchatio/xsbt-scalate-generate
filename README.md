@@ -90,4 +90,4 @@ Patches are gladly accepted from their original author. Along with any patches, 
  
 ## License
  
-MIT licensed. Check the [LICENSE](https://raw.github.com/mojolly/xsbt-scalate-generate/master/LICENSE) file.
+MIT licensed. Check the [LICENSE](https://raw.github.com/backchatio/xsbt-scalate-generate/master/LICENSE) file.
