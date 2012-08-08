@@ -40,12 +40,6 @@ object ScalatePlugin extends Plugin {
 
   import ScalateKeys._
     
-  private def scalateLoggingConfigValue: Initialize[File] =
-    (resourceDirectory in Compile) { (d) => new File(d, "/logback.xml") }
-
-  def scalateTemplateDirectoryValue: Initialize[File] =
-    (resourceDirectory in Compile) { (d) => d }
-
   def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = {
     (streams, sourceManaged in Compile, scalateTemplateDirectory in Compile, scalateLoggingConfig in Compile, managedClasspath in scalateClasspaths, scalateImports in Compile, scalateBindings in Compile, scalateOverwrite in Compile) map {
       (out, outputDir, inputDirs, logConfig, cp, imports, bindings, overwrite) => generateScalateSource(out, new File(outputDir, "scalate"), inputDirs, logConfig, cp, imports, bindings, overwrite)
@@ -99,6 +93,7 @@ object ScalatePlugin extends Plugin {
     scalateTemplateDirectory in Compile <<= (resourceDirectory in Compile),
     libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
+    watchSources <++= (scalateTemplateDirectory in Compile) map (d => (d ** "*").get),
     scalateOverwrite := true,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
 	  Classpaths.managedJars(Scalate, ct, report)

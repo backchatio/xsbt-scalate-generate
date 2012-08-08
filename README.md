@@ -4,12 +4,14 @@ Integration for SBT that lets you generate sources for your Scalate templates an
  
 ## Usage
 
+### Getting the plugin
+
 Include the plugin in `project/plugins.sbt`:
 
 For sbt 0.12.0:
 
 ```scala
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.1")
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.2")
 ```
 
 For sbt 0.11.3:
@@ -39,6 +41,8 @@ object PluginsBuild extends Build {
   lazy val scalateGenerate = ProjectRef(uri("git://github.com/mojolly/xsbt-scalate-generate.git"), "xsbt-scalate-generator")
 }
 ```
+
+### Configuring the plugin
 
 Configure the plugin in `build.sbt`:
 
@@ -71,10 +75,13 @@ scalateBindings ++= Seq(
 
 ```
 
-Trigger recompilation when template sources change.
+### Trigger recompilation on save
+
+From version 0.2.2 onwards the plugin detects when sources are changed and will trigger a recompilation.
+Older versions can add this to their build.sbt:
 
 ```scala
-watchSources <++= (sourceDirectory in Compile) map (d => (d / "webapp" ** "*").get)
+watchSources <++= (scalateTemplateDirectory in Compile) map (d => (d ** "*").get)
 ```
 
 ## Patches
