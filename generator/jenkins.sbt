@@ -8,7 +8,7 @@ javacOptions ++= Seq("-target", "1.6", "-source", "1.6")
 
 scalaVersion := "2.9.2"
 
-crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2")
+crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2", "2.10.0")
 
 organization := "com.mojolly.scalate"
 
@@ -37,7 +37,10 @@ pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
   </developers>
 )}
 
-libraryDependencies += "org.fusesource.scalate" % "scalate-core_2.9" % "1.6.0" % "compile"
+libraryDependencies <+= (scalaVersion) {
+  case v if v.startsWith("2.9") => "org.fusesource.scalate" % "scalate-core_2.9" % "1.6.0" % "compile"
+  case _ => "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.0" % "compile"
+}
 
 publishTo <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
