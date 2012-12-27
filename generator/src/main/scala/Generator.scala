@@ -16,6 +16,7 @@ class Generator {
   var overwrite: Boolean = _
   var scalateImports: Array[String] = Array.empty
   var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
+  var packagePrefix: String = _
 
   lazy val engine = {
     val e = new TemplateEngine
@@ -48,7 +49,7 @@ class Generator {
       throw new IllegalArgumentException("The targetDirectory property is not properly set")
     }
 
-    engine.packagePrefix = ""
+    engine.packagePrefix = packagePrefix
 
     targetDirectory.mkdirs
 

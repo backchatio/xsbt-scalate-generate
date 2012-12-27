@@ -53,6 +53,7 @@ object ScalatePlugin extends Plugin {
   }
 
   type Generator = {
+    var packagePrefix: String
     var sources: File
     var targetDirectory: File
     var logConfig: File
