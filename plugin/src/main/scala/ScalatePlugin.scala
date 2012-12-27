@@ -25,7 +25,8 @@ object ScalatePlugin extends Plugin {
   case class TemplateConfig(
      scalateTemplateDirectory:File,
      scalateImports:Seq[String],
-     scalateBindings:Seq[Binding]
+     scalateBindings:Seq[Binding],
+     packagePrefix: Option[String] = None
    )
 
   val Scalate = config("scalate") hide
@@ -81,7 +82,7 @@ object ScalatePlugin extends Plugin {
 
         val targetDirectory = outputDir / source.getName
         // Because we have to Scope each Template Folder we need to create unique package names
-        generator.packagePrefix = source.getName
+        generator.packagePrefix = t.packagePrefix getOrElse source.getName
         generator.sources = source
         generator.targetDirectory = targetDirectory
         generator.logConfig = logConfig
@@ -104,9 +105,8 @@ object ScalatePlugin extends Plugin {
 
   val scalateSettings: Seq[sbt.Project.Setting[_]] = Seq(
     ivyConfigurations += Scalate,
-    scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp", Nil, Nil)),
+    scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp", Nil, Nil, Some(""))),
     scalateLoggingConfig in Compile <<= (resourceDirectory in Compile) { _ / "logback.xml" },
-    scalateTemplateDirectory in Compile <<= (resourceDirectory in Compile),
     libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
     watchSources <++= (scalateTemplateConfig in Compile) map ( _.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get)),
@@ -114,9 +114,7 @@ object ScalatePlugin extends Plugin {
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
 	  Classpaths.managedJars(Scalate, ct, report)
 	},
-    scalateClasspaths <<= (fullClasspath in Runtime, managedClasspath in scalateClasspaths) map scalateClasspathsTask,
-    scalateBindings := Nil,
-    scalateImports := Nil)
+    scalateClasspaths <<= (fullClasspath in Runtime, managedClasspath in scalateClasspaths) map scalateClasspathsTask)
 
   /**
    * Runs a block of code with the Scalate classpath as the context class
