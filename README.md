@@ -8,10 +8,10 @@ Integration for SBT that lets you generate sources for your Scalate templates an
 
 Include the plugin in `project/plugins.sbt`:
 
-For sbt 0.12.0:
+For sbt 0.12.1:
 
 ```scala
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.2.2")
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.3.0")
 ```
 
 For sbt 0.11.3:

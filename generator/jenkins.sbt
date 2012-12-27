@@ -37,7 +37,7 @@ pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
   </developers>
 )}
 
-libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.5.3" % "compile"
+libraryDependencies += "org.fusesource.scalate" % "scalate-core" % "1.6.0" % "compile"
 
 publishTo <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
