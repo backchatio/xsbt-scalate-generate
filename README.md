@@ -8,10 +8,10 @@ Integration for SBT that lets you generate sources for your Scalate templates an
 
 Include the plugin in `project/plugins.sbt`:
 
-For sbt 0.12.1:
+For sbt 0.12.x:
 
 ```scala
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.3.0")
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.4.1")
 ```
 
 For sbt 0.11.3:
@@ -52,26 +52,47 @@ import ScalateKeys._
 
 seq(scalateSettings:_*)
       
-scalateTemplateDirectory in Compile <<= (sourceDirectory in Compile) { _ / "webapp" / "WEB-INF" }
-
-scalateImports ++= Seq(
-  "import scalaz._",
-  "import Scalaz._",
-  "import org.scalatra.oauth2._",
-  "import OAuth2Imports._",
-  "import model._"
+// Scalate Precompilation and Bindings
+scalateTemplateConfig in Compile := Seq(
+  TemplateConfig(
+    file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "webTmpl",
+    Seq(
+      "import com.hellofellow.scalate.Helpers._",
+      "import com.hellofellow.model._",
+      "import net.liftweb.common._",
+      "import org.joda.time._",
+      "import org.scalatra.UrlGenerator"
+    ),
+    Seq(
+      Binding("messageTranslatorModel", "com.hellofellow.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
+      Binding("userSession", "com.hellofellow.auth.UserSession", true, defaultValue = null),
+      Binding("antiCsrfTokenClass", "com.hellofellow.scalate.Token", true, defaultValue = null),
+      Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
+      Binding("assets", "com.hellofellow.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
+      Binding("geonames", "scala.Function0[com.hellofellow.model.Geonames]", false, isImplicit = true, defaultValue = null),
+      Binding("flash", "scala.collection.Map[String, Any]", defaultValue = "Map.empty"),
+      Binding("params", "scala.collection.Map[String, String]", defaultValue = "Map.empty"),
+      Binding("routeUserDetail", "org.scalatra.Route", defaultValue = "null") ,
+      Binding("env", "com.hellofellow.util.Environment")
+    )
+  ),
+  TemplateConfig(
+    file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "mailTmpl",
+    Seq(
+      "import com.hellofellow.scalate.Helpers._",
+      "import com.hellofellow.model._",
+      "import net.liftweb.common._",
+      "import org.joda.time._"
+    ),
+    Seq(
+      Binding("i18n", "com.hellofellow.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
+      Binding("user", "User", false, defaultValue = null),
+      Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
+      Binding("assets", "com.hellofellow.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
+      Binding("geonames", "com.hellofellow.model.Geonames", false, isImplicit = true, defaultValue = null)
+    )
+  )
 )
-
-scalateBindings ++= Seq(
-  Binding("flash", "scala.collection.Map[String, Any]", defaultValue = Some("Map.empty")),
-  Binding("session", "org.scalatra.Session"),
-  Binding("sessionOption", "Option[org.scalatra.Session]"),
-  Binding("params", "scala.collection.Map[String, String]"),
-  Binding("multiParams", "org.scalatra.MultiParams"),
-  Binding("userOption", "Option[ResourceOwner]", defaultValue = Some("None")),
-  Binding("user", "ResourceOwner", defaultValue = Some("null")),
-  Binding("isAnonymous", "Boolean", defaultValue = Some("true")),
-  Binding("isAuthenticated", "Boolean", defaultValue = Some("false")))
 
 ```
 
@@ -83,6 +104,27 @@ Older versions can add this to their build.sbt:
 ```scala
 watchSources <++= (scalateTemplateDirectory in Compile) map (d => (d ** "*").get)
 ```
+
+### To use multiiple template directories with scalatra you'll need to make some changes too: 
+
+```scala
+trait YourScalateSupport extends ScalateSupport {
+ 
+  override protected def defaultTemplatePath: List[String] = List("/webTmpl/views")
+ 
+  override protected def createTemplateEngine(config: ConfigT) = {
+    val engine = super.createTemplateEngine(config)
+ 
+    engine.layoutStrategy = new DefaultLayoutStrategy(engine,
+      TemplateEngine.templateTypes.map("/webTmpl/layouts/default." + _): _*)
+ 
+    engine.packagePrefix = "webTmpl"
+    engine
+  }
+ 
+}
+```
+
 
 ## Patches
 
