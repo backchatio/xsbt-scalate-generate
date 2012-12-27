@@ -13,15 +13,15 @@ crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.9.1-1", "2.9.2", "2.10
 organization := "com.mojolly.scalate"
 
 licenses := Seq(
-  "MIT" -> new URL("https://github.com/mojolly/xsbt-scalate-generate/blob/master/LICENSE")
+  "MIT" -> new URL("https://github.com/backchatio/xsbt-scalate-generate/blob/master/LICENSE")
 )
 
 pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
-  <url>http://github.com/mojolly/xsbt-scalate-generate</url>
+  <url>http://github.com/backchatio/xsbt-scalate-generate</url>
   <scm>
-    <connection>scm:git:git://github.com/mojolly/xsbt-scalate-generate.git</connection>
+    <connection>scm:git:git://github.com/backchatio/xsbt-scalate-generate.git</connection>
     <developerConnection>scm:git:git@github.com:mojolly/xsbt-scalate-generate.git</developerConnection>
-    <url>https://github.com/mojolly/xsbt-scalate-generate.git</url>
+    <url>https://github.com/backchatio/xsbt-scalate-generate.git</url>
   </scm>
   <developers>
     <developer>
@@ -33,6 +33,11 @@ pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
       <id>sdb</id>
       <name>Stefan De Boey</name>
       <url>http://stefandeboey.be/</url>
+    </developer>
+    <developer>
+      <id>BowlingX</id>
+      <name>David Heidrich</name>
+      <url>http://www.myself-design.com/</url>
     </developer>
   </developers>
 )}
