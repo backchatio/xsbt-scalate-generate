@@ -57,39 +57,39 @@ scalateTemplateConfig in Compile := Seq(
   TemplateConfig(
     file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "webTmpl",
     Seq(
-      "import com.hellofellow.scalate.Helpers._",
-      "import com.hellofellow.model._",
+      "import org.myapp.scalate.Helpers._",
+      "import org.myapp.model._",
       "import net.liftweb.common._",
       "import org.joda.time._",
       "import org.scalatra.UrlGenerator"
     ),
     Seq(
-      Binding("messageTranslatorModel", "com.hellofellow.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
-      Binding("userSession", "com.hellofellow.auth.UserSession", true, defaultValue = null),
-      Binding("antiCsrfTokenClass", "com.hellofellow.scalate.Token", true, defaultValue = null),
+      Binding("messageTranslatorModel", "org.myapp.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
+      Binding("userSession", "org.myapp.auth.UserSession", true, defaultValue = null),
+      Binding("antiCsrfTokenClass", "org.myapp.scalate.Token", true, defaultValue = null),
       Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
-      Binding("assets", "com.hellofellow.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
-      Binding("geonames", "scala.Function0[com.hellofellow.model.Geonames]", false, isImplicit = true, defaultValue = null),
+      Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
+      Binding("geonames", "scala.Function0[org.myapp.model.Geonames]", false, isImplicit = true, defaultValue = null),
       Binding("flash", "scala.collection.Map[String, Any]", defaultValue = "Map.empty"),
       Binding("params", "scala.collection.Map[String, String]", defaultValue = "Map.empty"),
       Binding("routeUserDetail", "org.scalatra.Route", defaultValue = "null") ,
-      Binding("env", "com.hellofellow.util.Environment")
+      Binding("env", "org.myapp.util.Environment")
     )
   ),
   TemplateConfig(
     file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "mailTmpl",
     Seq(
-      "import com.hellofellow.scalate.Helpers._",
-      "import com.hellofellow.model._",
+      "import org.myapp.scalate.Helpers._",
+      "import org.myapp.model._",
       "import net.liftweb.common._",
       "import org.joda.time._"
     ),
     Seq(
-      Binding("i18n", "com.hellofellow.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
+      Binding("i18n", "org.myapp.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
       Binding("user", "User", false, defaultValue = null),
       Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
-      Binding("assets", "com.hellofellow.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
-      Binding("geonames", "com.hellofellow.model.Geonames", false, isImplicit = true, defaultValue = null)
+      Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
+      Binding("geonames", "org.myapp.model.Geonames", false, isImplicit = true, defaultValue = null)
     )
   )
 )
