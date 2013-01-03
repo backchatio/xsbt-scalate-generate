@@ -26,7 +26,7 @@ object ScalatePlugin extends Plugin {
      scalateTemplateDirectory:File,
      scalateImports:Seq[String],
      scalateBindings:Seq[Binding],
-     packagePrefix: Option[String] = None
+     packagePrefix: Option[String] = Some("scalate")
    )
 
   val Scalate = config("scalate") hide
@@ -105,7 +105,7 @@ object ScalatePlugin extends Plugin {
 
   val scalateSettings: Seq[sbt.Project.Setting[_]] = Seq(
     ivyConfigurations += Scalate,
-    scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp", Nil, Nil, Some(""))),
+    scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
     scalateLoggingConfig in Compile <<= (resourceDirectory in Compile) { _ / "logback.xml" },
     libraryDependencies += "com.mojolly.scalate" %% "scalate-generator" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
