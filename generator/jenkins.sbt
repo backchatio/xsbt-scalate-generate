@@ -43,8 +43,8 @@ pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
 )}
 
 libraryDependencies <+= (scalaVersion) {
-  case v if v.startsWith("2.9") => "org.fusesource.scalate" % "scalate-core_2.9" % "1.6.0" % "compile"
-  case _ => "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.0" % "compile"
+  case v if v.startsWith("2.9") => "org.fusesource.scalate" % "scalate-core_2.9" % "1.6.1" % "compile"
+  case _ => "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1" % "compile"
 }
 
 publishTo <<= version { (v: String) =>
