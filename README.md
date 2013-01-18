@@ -11,7 +11,7 @@ Include the plugin in `project/plugins.sbt`:
 For sbt 0.12.x:
 
 ```scala
-addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.4.1")
+addSbtPlugin("com.mojolly.scalate" % "xsbt-scalate-generator" % "0.4.2")
 ```
 
 For sbt 0.11.3:
