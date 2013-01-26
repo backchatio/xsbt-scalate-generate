@@ -64,17 +64,12 @@ scalateTemplateConfig in Compile := Seq(
       "import org.scalatra.UrlGenerator"
     ),
     Seq(
-      Binding("messageTranslatorModel", "org.myapp.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
-      Binding("userSession", "org.myapp.auth.UserSession", true, defaultValue = null),
-      Binding("antiCsrfTokenClass", "org.myapp.scalate.Token", true, defaultValue = null),
-      Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
-      Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
-      Binding("geonames", "scala.Function0[org.myapp.model.Geonames]", false, isImplicit = true, defaultValue = null),
-      Binding("flash", "scala.collection.Map[String, Any]", defaultValue = "Map.empty"),
-      Binding("params", "scala.collection.Map[String, String]", defaultValue = "Map.empty"),
-      Binding("routeUserDetail", "org.scalatra.Route", defaultValue = "null") ,
+      Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true),
+      Binding("messageTranslatorModel", "org.myapp.model.mongo.MessageTranslator", importMembers = true, isImplicit = true, defaultValue = null),
+      Binding("userSession", "org.myapp.auth.UserSession", importMembers = true, defaultValue = null),
       Binding("env", "org.myapp.util.Environment")
-    )
+    ),
+    Some("webTmpl")
   ),
   TemplateConfig(
     file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "mailTmpl",
@@ -90,7 +85,8 @@ scalateTemplateConfig in Compile := Seq(
       Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
       Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
       Binding("geonames", "org.myapp.model.Geonames", false, isImplicit = true, defaultValue = null)
-    )
+    ),
+    Some("mailTmpl")
   )
 )
 
