@@ -54,39 +54,41 @@ seq(scalateSettings:_*)
       
 // Scalate Precompilation and Bindings
 scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
-  TemplateConfig(
-    base / "webapp" / "WEB-INF" / "webTmpl",
-    Seq(
-      "import org.myapp.scalate.Helpers._",
-      "import org.myapp.model._",
-      "import net.liftweb.common._",
-      "import org.joda.time._",
-      "import org.scalatra.UrlGenerator"
+  Seq(
+    TemplateConfig(
+      base / "webapp" / "WEB-INF" / "webTmpl",
+      Seq(
+        "import org.myapp.scalate.Helpers._",
+        "import org.myapp.model._",
+        "import net.liftweb.common._",
+        "import org.joda.time._",
+        "import org.scalatra.UrlGenerator"
+      ),
+      Seq(
+        Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true),
+        Binding("messageTranslatorModel", "org.myapp.model.mongo.MessageTranslator", importMembers = true, isImplicit = true, defaultValue = null),
+        Binding("userSession", "org.myapp.auth.UserSession", importMembers = true, defaultValue = null),
+        Binding("env", "org.myapp.util.Environment")
+      ),
+      Some("webTmpl")
     ),
-    Seq(
-      Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true),
-      Binding("messageTranslatorModel", "org.myapp.model.mongo.MessageTranslator", importMembers = true, isImplicit = true, defaultValue = null),
-      Binding("userSession", "org.myapp.auth.UserSession", importMembers = true, defaultValue = null),
-      Binding("env", "org.myapp.util.Environment")
-    ),
-    Some("webTmpl")
-  ),
-  TemplateConfig(
-    base / "webapp" / "WEB-INF" / "mailTmpl",
-    Seq(
-      "import org.myapp.scalate.Helpers._",
-      "import org.myapp.model._",
-      "import net.liftweb.common._",
-      "import org.joda.time._"
-    ),
-    Seq(
-      Binding("i18n", "org.myapp.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
-      Binding("user", "User", false, defaultValue = null),
-      Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
-      Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
-      Binding("geonames", "org.myapp.model.Geonames", false, isImplicit = true, defaultValue = null)
-    ),
-    Some("mailTmpl")
+    TemplateConfig(
+      base / "webapp" / "WEB-INF" / "mailTmpl",
+      Seq(
+        "import org.myapp.scalate.Helpers._",
+        "import org.myapp.model._",
+        "import net.liftweb.common._",
+        "import org.joda.time._"
+      ),
+      Seq(
+        Binding("i18n", "org.myapp.model.mongo.MessageTranslator", true, isImplicit = true, defaultValue = null),
+        Binding("user", "User", false, defaultValue = null),
+        Binding("config", "com.typesafe.config.Config", false, defaultValue = null),
+        Binding("assets", "org.myapp.model.mongo.fields.AssetPaths", false, isImplicit = true, defaultValue = null),
+        Binding("geonames", "org.myapp.model.Geonames", false, isImplicit = true, defaultValue = null)
+      ),
+      Some("mailTmpl")
+    )
   )
 )
 
