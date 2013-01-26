@@ -53,9 +53,9 @@ import ScalateKeys._
 seq(scalateSettings:_*)
       
 // Scalate Precompilation and Bindings
-scalateTemplateConfig in Compile := Seq(
+scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
   TemplateConfig(
-    file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "webTmpl",
+    base / "webapp" / "WEB-INF" / "webTmpl",
     Seq(
       "import org.myapp.scalate.Helpers._",
       "import org.myapp.model._",
@@ -72,7 +72,7 @@ scalateTemplateConfig in Compile := Seq(
     Some("webTmpl")
   ),
   TemplateConfig(
-    file("backend") / "src" / "main" / "webapp" / "WEB-INF" / "mailTmpl",
+    base / "webapp" / "WEB-INF" / "mailTmpl",
     Seq(
       "import org.myapp.scalate.Helpers._",
       "import org.myapp.model._",
