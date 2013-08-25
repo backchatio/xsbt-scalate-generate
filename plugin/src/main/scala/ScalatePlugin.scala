@@ -112,8 +112,8 @@ object ScalatePlugin extends Plugin {
     watchSources <++= (scalateTemplateConfig in Compile) map ( _.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get)),
     scalateOverwrite := true,
     managedClasspath in scalateClasspaths <<= (classpathTypes, update) map { ( ct, report)   =>
-	  Classpaths.managedJars(Scalate, ct, report)
-	},
+      Classpaths.managedJars(Scalate, ct, report)
+    },
     scalateClasspaths <<= (fullClasspath in Runtime, managedClasspath in scalateClasspaths) map scalateClasspathsTask)
 
   /**
