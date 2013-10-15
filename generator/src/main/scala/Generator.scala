@@ -2,7 +2,6 @@ package com.mojolly.scalate
 
 import org.fusesource.scalate.{ TemplateEngine, TemplateSource, Binding }
 import org.fusesource.scalate.util.IOUtil
-
 import java.io.File
 
 /**
@@ -60,9 +59,15 @@ class Generator {
 
     paths collect {
       case Updated(uri, templateFile, scalaFile) =>
+        var code:String = ""
+        try {
         val template = TemplateSource.fromFile(templateFile, uri)
-
-        val code = engine.generateScala(template).source
+         code = engine.generateScala(template).source
+        } catch {
+          case e:Exception => {
+            throw new Exception("Template compilation failed at file %s, Exception: %s" format (templateFile.getCanonicalPath(), e.getMessage()), e);
+          }
+        }
         scalaFile.getParentFile.mkdirs
         IOUtil.writeBinaryFile(scalaFile, code.getBytes("UTF-8"))
         scalaFile
