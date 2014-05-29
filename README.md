@@ -90,7 +90,7 @@ scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
       Some("mailTmpl")
     )
   )
-)
+}
 
 ```
 
