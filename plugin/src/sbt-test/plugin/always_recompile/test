@@ -1,0 +1,23 @@
+# scalateOverwrite is true, so template files are always recompiled.
+# check if template files are compiled.
+
+> clean
+
+# first
+> compile
+
+> checkCompiled
+
+> recordModifiedTime
+
+# second
+> compile
+
+> checkRecompiled
+
+> recordModifiedTime
+
+# third
+> compile
+
+> checkRecompiled
