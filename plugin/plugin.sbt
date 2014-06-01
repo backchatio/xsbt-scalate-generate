@@ -10,6 +10,8 @@ sbtPlugin := true
 
 organization := "com.mojolly.scalate"
 
+scalaVersion := "2.10.4"
+
 licenses := Seq(
   "MIT" -> new URL("https://github.com/backchatio/xsbt-scalate-generate/blob/master/LICENSE")
 )
