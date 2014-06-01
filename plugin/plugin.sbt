@@ -40,6 +40,8 @@ pomExtra <<= (pomExtra, name, description) {(pom, name, desc) => pom ++ Group(
   </developers>
 )}
 
+resolvers += Resolver.url("Typesafe repository", new java.net.URL("http://typesafe.artifactoryonline.com/typesafe/ivy-releases/"))(Resolver.defaultIvyPatterns)
+
 sourceGenerators in Compile <+= (sourceManaged in Compile, name, organization, version) map {
     (sourceManaged:File, name:String, vgp:String, buildVersion) =>
         val file  = sourceManaged / vgp.replace(".","/") / "Version.scala"

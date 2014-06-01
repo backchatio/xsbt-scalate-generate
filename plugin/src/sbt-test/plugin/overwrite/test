@@ -1,0 +1,27 @@
+# use these directories to record the modified time of compiled scala files.
+$ mkdir modified_time/refreshed
+$ mkdir modified_time/not_refreshed
+
+# check if scala files are recompiled.
+> clean
+
+> compile
+
+> recordModifiedTime
+
+> updateModifiedTime
+
+> compile
+
+> checkRecompiled
+
+# check if scala files are not recompiled.
+> clean
+
+> compile
+
+> recordModifiedTime
+
+> compile
+
+> checkNotRecompiled
