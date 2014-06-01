@@ -1,0 +1,6 @@
+# check if template files are compiled.
+> clean
+
+> compile
+
+> check
