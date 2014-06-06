@@ -80,6 +80,7 @@ object ScalatePlugin extends Plugin {
         val source = t.scalateTemplateDirectory
         out.log.info("Compiling Templates in Template Directory: %s" format t.scalateTemplateDirectory.getAbsolutePath)
 
+        val preservedLogbackConfiguration = Option(System.getProperty("logback.configurationFile"))
         val targetDirectory = outputDir / source.getName
         // Because we have to Scope each Template Folder we need to create unique package names
         generator.packagePrefix = t.packagePrefix getOrElse source.getName
@@ -98,7 +99,14 @@ object ScalatePlugin extends Plugin {
             b.isImplicit.asInstanceOf[AnyRef])
 
         }
-        generator.execute.toList
+        try {
+          generator.execute.toList
+        } finally {
+          preservedLogbackConfiguration match {
+            case Some(oldConfig) => System.setProperty("logback.configurationFile", oldConfig)
+            case None => System.clearProperty("logback.configurationFile")
+          }
+        }
       }
     }
   }
